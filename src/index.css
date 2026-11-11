@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #ebe9e3;
+  --color-bg-secondary: #e0ddd4;
+  --color-bg-tertiary: #d8d5cb;
+  --color-text-dark: #2b2b2b;
+  --color-text-muted: #4e4e4e;
+  --color-accent-yellow: #fff388;
+  --color-accent-hover: #fff066;
+  --color-border-color: #2b2b2b;
+
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --shadow-card: 0 8px 32px rgba(43, 43, 43, 0.1);
+  --shadow-hover: 0 12px 40px rgba(43, 43, 43, 0.15);
+}
+
+/* Custom spacing utilities from original tailwind.config without overriding max-w-* */
+.px-2xl {
+  padding-left: 60px;
+  padding-right: 60px;
+}
+.py-3xl {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.pt-3xl {
+  padding-top: 80px;
+}
+@media (min-width: 1024px) {
+  .lg\:px-3xl {
+    padding-left: 80px;
+    padding-right: 80px;
+  }
+}
+
+/* Scroll-triggered animations from original HTML */
+.animate-on-scroll-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.animate-on-scroll-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Status badge animation from original HTML */
+@keyframes statusBlink {
+  0%, 50%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  25% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+}
+@keyframes dotPulse {
+  0%, 100% {
+    background-color: #fff388;
+    box-shadow: 0 0 0 0 rgba(255, 243, 136, 0.4);
+    opacity: 1;
+    transform: scale(1);
+  }
+  25% {
+    background-color: #fff066;
+    box-shadow: 0 0 0 2px rgba(255, 243, 136, 0.6);
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    background-color: #ffeb3b;
+    box-shadow: 0 0 0 4px rgba(255, 243, 136, 0.3);
+    opacity: 0.1;
+    transform: scale(1.2);
+  }
+  75% {
+    background-color: #fff066;
+    box-shadow: 0 0 0 2px rgba(255, 243, 136, 0.6);
+    opacity: 0.7;
+    transform: scale(0.9);
+  }
+}
+.animation-status {
+  animation: statusBlink 2s ease-in-out infinite;
+}
+.animation-dot {
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+/* Scroll indicator animation from original HTML */
+@keyframes scroll {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+.animate-scroll {
+  animation: scroll 2s ease-in-out infinite;
+}
+
+/* Image reveal animation from original HTML */
+@keyframes imageReveal {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+.image-reveal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ebe9e3;
+  transform-origin: left;
+  z-index: 10;
+  pointer-events: none;
+}
+.image-reveal-overlay.revealed {
+  animation: imageReveal 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}

@@ -1,0 +1,790 @@
+Below is the component for your context <!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Alex Chen — Architect &amp; Designer</title>
+  <meta name="description" content="Personal portfolio of Alex Chen, an award-winning architect specializing in sustainable residential design and thoughtful spatial experiences.">
+
+  
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet">
+
+  <style>
+    /* Scroll-triggered animations */
+    .animate-on-scroll-hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .animate-on-scroll-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Status badge animation */
+    @keyframes statusBlink {
+      0%, 50%, 100% { opacity: 1; transform: scale(1); }
+      25% { opacity: 0.7; transform: scale(1.02); }
+    }
+    @keyframes dotPulse {
+      0%, 100% { background-color: #fff388; box-shadow: 0 0 0 0 rgba(255, 243, 136, 0.4); opacity: 1; transform: scale(1); }
+      25% { background-color: #fff066; box-shadow: 0 0 0 2px rgba(255, 243, 136, 0.6); opacity: 0.3; transform: scale(0.8); }
+      50% { background-color: #ffeb3b; box-shadow: 0 0 0 4px rgba(255, 243, 136, 0.3); opacity: 0.1; transform: scale(1.2); }
+      75% { background-color: #fff066; box-shadow: 0 0 0 2px rgba(255, 243, 136, 0.6); opacity: 0.7; transform: scale(0.9); }
+    }
+    .animation-status { animation: statusBlink 2s ease-in-out infinite; }
+    .animation-dot { animation: dotPulse 2s ease-in-out infinite; }
+
+    /* Scroll indicator animation */
+    @keyframes scroll {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(200%); }
+    }
+    .animate-scroll { animation: scroll 2s ease-in-out infinite; }
+
+    /* Image reveal animation */
+    @keyframes imageReveal {
+      from { transform: scaleX(1); }
+      to { transform: scaleX(0); }
+    }
+    .image-reveal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ebe9e3;
+      transform-origin: left;
+      z-index: 10;
+    }
+    .image-reveal-overlay.revealed {
+      animation: imageReveal 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    }
+  </style>
+<style type="text/tailwindcss">@tailwind base;
+@tailwind components;
+@tailwind utilities;</style><script src="https://cdn.tailwindcss.com"></script><script>tailwind.config = {
+  content: [
+    "./_layout.html",
+    "./content/**/*.html",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        'bg-primary': '#ebe9e3',
+        'bg-secondary': '#e0ddd4',
+        'bg-tertiary': '#d8d5cb',
+        'text-dark': '#2b2b2b',
+        'text-muted': '#4e4e4e',
+        'accent-yellow': '#fff388',
+        'accent-hover': '#fff066',
+        'border-color': '#2b2b2b',
+      },
+      fontFamily: {
+        'serif': ['Instrument Serif', 'serif'],
+        'sans': ['Space Grotesk', 'sans-serif'],
+      },
+      spacing: {
+        's': '16px',
+        'm': '24px',
+        'l': '32px',
+        'xl': '40px',
+        '2xl': '60px',
+        '3xl': '80px',
+        '4xl': '100px',
+      },
+      borderRadius: {
+        'sm': '4px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+      },
+      boxShadow: {
+        'card': '0 8px 32px rgba(43, 43, 43, 0.1)',
+        'hover': '0 12px 40px rgba(43, 43, 43, 0.15)',
+      },
+    }
+  }
+}</script></head>
+
+<body class="font-sans bg-bg-primary text-text-dark overflow-x-hidden">
+
+  <!-- Main Navigation -->
+  <header class="fixed top-0 left-0 w-full bg-bg-primary border-b border-border-color z-50">
+    <nav data-editable="header" class="max-w-7xl mx-auto flex justify-between items-center px-6 lg:px-3xl py-4">
+      <a data-editable="text" data-path="header.logo.text" class="font-serif text-3xl text-text-dark" href="/">
+        Alex Chen
+      </a>
+      
+      <div class="hidden md:flex items-center gap-6" data-editable-list="header.navLinks">
+        <a data-editable="text" data-path="header.navLinks[0].text" class="text-sm font-medium uppercase tracking-wider hover:text-text-muted transition-colors" href="#work">Work</a>
+        <a data-editable="text" data-path="header.navLinks[1].text" class="text-sm font-medium uppercase tracking-wider hover:text-text-muted transition-colors" href="#about">About</a>
+        <a data-editable="text" data-path="header.navLinks[2].text" class="text-sm font-medium uppercase tracking-wider hover:text-text-muted transition-colors" href="#process">Approach</a>
+      </div>
+
+      <button data-editable="text" data-path="header.ctaButton.text" class="hidden md:inline-flex items-center gap-2 bg-accent-yellow text-text-dark font-medium text-sm uppercase tracking-wider px-6 py-3 border border-border-color hover:bg-accent-hover hover:scale-105 hover:shadow-card transition-all duration-300">
+        Let's Talk
+        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+      </button>
+
+      <button class="md:hidden flex flex-col gap-1.5 w-6" aria-label="Toggle menu" id="mobile-menu-toggle">
+        <span class="w-full h-0.5 bg-text-dark transition-all"></span>
+        <span class="w-full h-0.5 bg-text-dark transition-all"></span>
+        <span class="w-full h-0.5 bg-text-dark transition-all"></span>
+      </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="hidden md:hidden flex-col gap-6 px-6 py-8 border-t border-border-color" id="mobile-menu">
+      <a class="text-sm font-medium uppercase tracking-wider" href="#work">Work</a>
+      <a class="text-sm font-medium uppercase tracking-wider" href="#about">About</a>
+      <a class="text-sm font-medium uppercase tracking-wider" href="#process">Approach</a>
+      <button class="inline-flex items-center gap-2 bg-accent-yellow text-text-dark font-medium text-sm uppercase tracking-wider px-6 py-3 border border-border-color self-start">
+        Let's Talk →
+      </button>
+    </div>
+  </header>
+
+  <main><!-- Hero Section -->
+<section class="relative w-full min-h-screen flex items-center overflow-hidden pt-24 lg:pt-0">
+  <!-- Background Grid Pattern -->
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute inset-0" style="background-image: linear-gradient(#2b2b2b 1px, transparent 1px), linear-gradient(90deg, #2b2b2b 1px, transparent 1px); background-size: 40px 40px;"></div>
+  </div>
+
+  <!-- Floating Geometric Elements -->
+  <div class="absolute top-20 right-10 w-32 h-32 border border-border-color transform rotate-45 opacity-30" data-animation-on-scroll="fadeInUp"></div>
+  <div class="absolute bottom-32 left-10 w-24 h-24 bg-accent-yellow opacity-20" data-animation-on-scroll="fadeInUp"></div>
+  <div class="absolute top-1/3 right-1/4 w-16 h-16 border-2 border-text-muted rounded-full opacity-20" data-animation-on-scroll="fadeInUp"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-3xl w-full py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      
+      <!-- Left Content Area -->
+      <div class="lg:col-span-7 space-y-4 relative z-10" data-animation-on-scroll="fadeInUp">
+        
+        <!-- Status Badge with Vertical Line -->
+        <div class="flex items-start gap-4">
+          <div class="flex flex-col items-center gap-2">
+            <div class="w-3 h-3 bg-accent-yellow border-2 border-border-color rounded-full animation-dot"></div>
+            <div class="w-0.5 h-8 bg-border-color opacity-30"></div>
+          </div>
+          <div class="pt-0.5">
+            <span class="text-xs font-medium uppercase tracking-widest">Available for Select Projects — 2024</span>
+          </div>
+        </div>
+
+        <!-- Main Heading with Creative Typography -->
+        <div class="space-y-4">
+          <div class="overflow-hidden">
+            <h1 data-editable="text" data-path="hero.heading" class="font-serif text-6xl lg:text-8xl leading-none">
+              <span class="block" style="transform: translateY(0); transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);">
+                Architecture
+              </span>
+            </h1>
+          </div>
+          
+          <div class="overflow-hidden">
+            <h1 class="font-serif text-6xl lg:text-8xl leading-none flex items-center gap-4" style="transform: translateY(0); transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1) 0.1s;">
+              <span class="relative inline-block">
+                That
+                <span class="absolute -bottom-2 left-0 w-full h-1 bg-accent-yellow"></span>
+              </span>
+              <span class="text-accent-yellow italic" style="-webkit-text-stroke: 2px #2b2b2b; text-stroke: 2px #2b2b2b; -webkit-text-fill-color: transparent;">
+                Breathes
+              </span>
+            </h1>
+          </div>
+        </div>
+
+        <!-- Subheading with Accent Bar -->
+        <div class="flex gap-6 items-start max-w-xl">
+          <div class="w-1 h-24 bg-accent-yellow flex-shrink-0"></div>
+          <p data-editable="text" data-path="hero.subheading" class="text-lg lg:text-xl text-text-muted leading-relaxed pt-2">
+            I'm Alex Chen, an architect focused on creating spaces that connect people with their environment through thoughtful, sustainable design.
+          </p>
+        </div>
+
+        <!-- Creative Info Cards -->
+        <div class="grid grid-cols-2 gap-4 max-w-md">
+          <div class="bg-bg-secondary border border-border-color p-4 hover:bg-text-dark hover:text-bg-primary transition-all duration-300 group">
+            <div class="font-serif text-3xl mb-1">28+</div>
+            <div class="text-xs uppercase tracking-wider opacity-70">Projects Completed</div>
+          </div>
+          <div class="bg-bg-secondary border border-border-color p-4 hover:bg-text-dark hover:text-bg-primary transition-all duration-300 group">
+            <div class="font-serif text-3xl mb-1">9</div>
+            <div class="text-xs uppercase tracking-wider opacity-70">Design Awards</div>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap gap-4 pt-4">
+          <a href="#work" class="group relative inline-flex items-center gap-3 bg-text-dark text-bg-primary font-medium text-sm uppercase tracking-wider px-8 py-4 overflow-hidden transition-all duration-300 hover:gap-5">
+            <span class="relative z-10">Explore Work</span>
+            <span class="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
+            <div class="absolute inset-0 bg-accent-yellow transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+            <div class="absolute inset-0 bg-text-dark"></div>
+          </a>
+          <a href="#contact" class="inline-flex items-center gap-2 bg-transparent text-text-dark font-medium text-sm uppercase tracking-wider px-8 py-4 border-2 border-border-color hover:border-accent-yellow hover:bg-accent-yellow transition-all duration-300">
+            Let's Talk
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Image Area with Creative Layout -->
+      <div class="lg:col-span-5 relative" data-animation-on-scroll="fadeInUp">
+        
+        <!-- Main Image with Angled Frame -->
+        <div class="relative">
+          <!-- Decorative Corner Elements -->
+          <div class="absolute -top-4 -left-4 w-20 h-20 border-t-2 border-l-2 border-border-color z-20"></div>
+          <div class="absolute -bottom-4 -right-4 w-20 h-20 border-b-2 border-r-2 border-border-color z-20"></div>
+          
+          <!-- Image Container -->
+          <div class="relative" data-image-reveal="">
+            <div class="relative overflow-hidden" style="clip-path: polygon(0 0, 100% 8%, 100% 100%, 0% 92%);">
+              <img src="https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&amp;h=1000&amp;fit=crop" alt="Modern architectural design" class="w-full h-[500px] lg:h-[600px] object-cover">
+            </div>
+            <div class="image-reveal-overlay" style="clip-path: polygon(0 0, 100% 8%, 100% 100%, 0% 92%);"></div>
+          </div>
+
+          <!-- Floating Info Card -->
+          <div class="absolute -bottom-8 left-6 lg:-left-8 bg-accent-yellow border border-border-color p-6 max-w-xs z-20 shadow-card">
+            <div class="text-xs uppercase tracking-wider mb-2 opacity-70">Latest Achievement</div>
+            <div class="font-serif text-xl mb-1">AIA Merit Award</div>
+            <div class="text-sm">Skyline Residence — 2023</div>
+          </div>
+        </div>
+
+        <!-- Small Accent Image -->
+        <div class="absolute -top-12 -left-12 hidden lg:block w-32 h-32 border-2 border-accent-yellow opacity-50" data-animation-on-scroll="fadeInUp"></div>
+      </div>
+
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="hidden lg:flex absolute bottom-8 left-1/2 transform -translate-x-1/2 flex-col items-center gap-2 text-text-muted">
+      <span class="text-xs uppercase tracking-widest">Scroll</span>
+      <div class="w-0.5 h-16 bg-border-color relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-8 bg-accent-yellow animate-scroll"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-16 px-6 lg:px-3xl bg-bg-secondary border-b border-border-color" data-animation-on-scroll="fadeInUp">
+  <div class="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="text-center">
+      <div class="font-serif text-5xl mb-2">28+</div>
+      <div class="text-sm font-medium uppercase tracking-wider text-text-muted">Completed Projects</div>
+    </div>
+    <div class="text-center">
+      <div class="font-serif text-5xl mb-2">9</div>
+      <div class="text-sm font-medium uppercase tracking-wider text-text-muted">Design Awards</div>
+    </div>
+    <div class="text-center">
+      <div class="font-serif text-5xl mb-2">6</div>
+      <div class="text-sm font-medium uppercase tracking-wider text-text-muted">Countries</div>
+    </div>
+    <div class="text-center">
+      <div class="font-serif text-5xl mb-2">12+</div>
+      <div class="text-sm font-medium uppercase tracking-wider text-text-muted">Years of Practice</div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Work Section -->
+<section id="work" class="py-24 px-6 lg:px-3xl" data-animation-on-scroll="fadeInUp">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-16">
+      <h5 class="inline-block text-xs font-medium uppercase tracking-wider pb-2 border-b border-dashed border-border-color mb-3">Selected Projects</h5>
+      <h2 class="font-serif text-4xl lg:text-6xl">Recent Work</h2>
+    </div>
+
+    <!-- Project 1 - Large Featured -->
+    <div class="mb-20 group" data-animation-on-scroll="fadeInUp">
+      <a href="/case-studies/skyline-residence" class="block">
+        <div class="relative overflow-hidden mb-6 bg-bg-secondary border border-border-color" data-image-reveal="">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1400&amp;h=900&amp;fit=crop" alt="Skyline Residence" class="w-full h-96 lg:h-[600px] object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="image-reveal-overlay"></div>
+        </div>
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-4">
+          <div>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-accent-yellow border border-border-color">Residential</span>
+              <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-bg-secondary border border-border-color">Sustainable</span>
+              <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-bg-secondary border border-border-color">2023</span>
+            </div>
+            <h3 class="font-serif text-3xl lg:text-5xl mb-2 group-hover:text-text-muted transition-colors">Skyline Residence</h3>
+            <p class="text-text-muted max-w-2xl">A contemporary hillside home that merges minimalist design with the natural landscape, featuring passive solar strategies and locally-sourced materials.</p>
+          </div>
+          <div class="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wider group-hover:gap-4 transition-all">
+            View Project
+            <span class="transition-transform duration-300 group-hover:translate-x-2">→</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+      <!-- Project 2 -->
+      <div class="group" data-animation-on-scroll="fadeInUp">
+        <a href="/case-studies/urban-loft" class="block">
+          <div class="relative overflow-hidden mb-6 bg-bg-secondary border border-border-color" data-image-reveal="">
+            <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&amp;h=600&amp;fit=crop" alt="Urban Loft Renovation" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="image-reveal-overlay"></div>
+          </div>
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-accent-yellow border border-border-color">Renovation</span>
+            <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-bg-secondary border border-border-color">Urban</span>
+          </div>
+          <h3 class="font-serif text-2xl lg:text-3xl mb-2 group-hover:text-text-muted transition-colors">Downtown Loft</h3>
+          <p class="text-text-muted mb-4">Adaptive reuse of an industrial warehouse into a light-filled live-work space that celebrates the building's heritage.</p>
+          <div class="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wider group-hover:gap-4 transition-all">
+            View Project
+            <span class="transition-transform duration-300 group-hover:translate-x-2">→</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="group" data-animation-on-scroll="fadeInUp">
+        <a href="/case-studies/forest-retreat" class="block">
+          <div class="relative overflow-hidden mb-6 bg-bg-secondary border border-border-color" data-image-reveal="">
+            <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800&amp;h=600&amp;fit=crop" alt="Forest Retreat" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="image-reveal-overlay"></div>
+          </div>
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-accent-yellow border border-border-color">Cabin</span>
+            <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-bg-secondary border border-border-color">Off-Grid</span>
+          </div>
+          <h3 class="font-serif text-2xl lg:text-3xl mb-2 group-hover:text-text-muted transition-colors">Forest Retreat</h3>
+          <p class="text-text-muted mb-4">Off-grid cabin designed to minimize environmental impact while maximizing connection to the surrounding forest.</p>
+          <div class="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wider group-hover:gap-4 transition-all">
+            View Project
+            <span class="transition-transform duration-300 group-hover:translate-x-2">→</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Project 4 -->
+      <div class="group" data-animation-on-scroll="fadeInUp">
+        <a href="/case-studies/community-library" class="block">
+          <div class="relative overflow-hidden mb-6 bg-bg-secondary border border-border-color" data-image-reveal="">
+            <img src="https://images.unsplash.com/photo-1577495508048-b635879837f1?w=800&amp;h=600&amp;fit=crop" alt="Community Library" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="image-reveal-overlay"></div>
+          </div>
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-accent-yellow border border-border-color">Public</span>
+            <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-bg-secondary border border-border-color">Community</span>
+          </div>
+          <h3 class="font-serif text-2xl lg:text-3xl mb-2 group-hover:text-text-muted transition-colors">Neighborhood Library</h3>
+          <p class="text-text-muted mb-4">A community gathering space that reimagines the public library as an open, inclusive environment for learning and connection.</p>
+          <div class="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wider group-hover:gap-4 transition-all">
+            View Project
+            <span class="transition-transform duration-300 group-hover:translate-x-2">→</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Project 5 -->
+      <div class="group" data-animation-on-scroll="fadeInUp">
+        <a href="/case-studies/coastal-home" class="block">
+          <div class="relative overflow-hidden mb-6 bg-bg-secondary border border-border-color" data-image-reveal="">
+            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&amp;h=600&amp;fit=crop" alt="Coastal Home" class="w-full h-80 object-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="image-reveal-overlay"></div>
+          </div>
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-accent-yellow border border-border-color">Residential</span>
+            <span class="text-xs font-medium uppercase tracking-wider px-3 py-1 bg-bg-secondary border border-border-color">Coastal</span>
+          </div>
+          <h3 class="font-serif text-2xl lg:text-3xl mb-2 group-hover:text-text-muted transition-colors">Pacific House</h3>
+          <p class="text-text-muted mb-4">Oceanfront residence designed to withstand coastal conditions while framing dramatic views of the Pacific.</p>
+          <div class="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-wider group-hover:gap-4 transition-all">
+            View Project
+            <span class="transition-transform duration-300 group-hover:translate-x-2">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="text-center mt-16" data-animation-on-scroll="fadeInUp">
+      <a href="/case-studies" class="inline-flex items-center gap-2 bg-text-dark text-bg-primary font-medium text-sm uppercase tracking-wider px-8 py-4 border border-border-color hover:bg-text-muted hover:scale-105 transition-all duration-300 group">
+        View All Projects
+        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-24 px-6 lg:px-3xl bg-bg-secondary border-y border-border-color" data-animation-on-scroll="fadeInUp">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div data-image-reveal="">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&amp;h=800&amp;fit=crop" alt="Alex Chen" class="w-full border border-border-color">
+          <div class="image-reveal-overlay"></div>
+        </div>
+      </div>
+      
+      <div>
+        <h5 class="inline-block text-xs font-medium uppercase tracking-wider pb-2 border-b border-dashed border-border-color mb-6">About Me</h5>
+        <h2 class="font-serif text-4xl lg:text-5xl mb-6">Designing With Purpose &amp; Precision</h2>
+        
+        <div class="space-y-4 text-text-muted mb-8">
+          <p>
+            I'm an architect based in Portland, Oregon, with a passion for creating spaces that enhance the human experience while respecting the natural environment.
+          </p>
+          <p>
+            After earning my M.Arch from MIT and working with renowned firms in New York and Tokyo, I started my independent practice in 2018 to pursue projects that align with my values of sustainability, craftsmanship, and thoughtful design.
+          </p>
+          <p>
+            My approach combines rigorous technical expertise with a deep sensitivity to context, materiality, and the lived experience of space. Each project is an opportunity to create something meaningful and enduring.
+          </p>
+        </div>
+
+        <div class="space-y-3 mb-8">
+          <div class="flex items-start gap-3">
+            <span class="text-accent-yellow mt-1">✓</span>
+            <span><strong>Licensed Architect</strong> — Oregon, California, New York</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="text-accent-yellow mt-1">✓</span>
+            <span><strong>LEED AP BD+C</strong> — Sustainable design specialist</span>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="text-accent-yellow mt-1">✓</span>
+            <span><strong>Awards</strong> — AIA Merit Award, Architizer A+ Award</span>
+          </div>
+        </div>
+
+        <a href="#contact" class="inline-flex items-center gap-2 bg-accent-yellow text-text-dark font-medium text-sm uppercase tracking-wider px-6 py-3 border border-border-color hover:bg-accent-hover hover:scale-105 transition-all duration-300 group">
+          Work With Me
+          <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Design Focus -->
+<section class="py-24 px-6 lg:px-3xl" data-animation-on-scroll="fadeInUp">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-16 text-center">
+      <h5 class="inline-block text-xs font-medium uppercase tracking-wider pb-2 border-b border-dashed border-border-color mb-3">What I Do</h5>
+      <h2 class="font-serif text-4xl lg:text-6xl">Design Focus</h2>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Focus 1 -->
+      <div class="bg-bg-secondary border border-border-color p-8 lg:p-10 hover:bg-bg-tertiary hover:shadow-card transition-all duration-300 group" data-animation-on-scroll="fadeInUp">
+        <div class="w-16 h-16 bg-accent-yellow border border-border-color rounded-md flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+        </div>
+        <h3 class="font-serif text-2xl mb-4">Custom Homes</h3>
+        <p class="text-text-muted mb-6">Personalized residential design that reflects how you live, from compact urban dwellings to expansive rural retreats.</p>
+        <ul class="space-y-2 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="text-accent-yellow">•</span>
+            New Construction
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-yellow">•</span>
+            Renovations
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-yellow">•</span>
+            Additions
+          </li>
+        </ul>
+      </div>
+
+      <!-- Focus 2 -->
+      <div class="bg-bg-secondary border border-border-color p-8 lg:p-10 hover:bg-bg-tertiary hover:shadow-card transition-all duration-300 group" data-animation-on-scroll="fadeInUp">
+        <div class="w-16 h-16 bg-accent-yellow border border-border-color rounded-md flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+          </svg>
+        </div>
+        <h3 class="font-serif text-2xl mb-4">Sustainable Design</h3>
+        <p class="text-text-muted mb-6">Environmentally conscious architecture that prioritizes energy efficiency, natural materials, and site sensitivity.</p>
+        <ul class="space-y-2 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="text-accent-yellow">•</span>
+            Passive Strategies
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-yellow">•</span>
+            LEED Projects
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-yellow">•</span>
+            Net-Zero Goals
+          </li>
+        </ul>
+      </div>
+
+      <!-- Focus 3 -->
+      <div class="bg-bg-secondary border border-border-color p-8 lg:p-10 hover:bg-bg-tertiary hover:shadow-card transition-all duration-300 group" data-animation-on-scroll="fadeInUp">
+        <div class="w-16 h-16 bg-accent-yellow border border-border-color rounded-md flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="9" y1="21" x2="9" y2="9"></line>
+          </svg>
+        </div>
+        <h3 class="font-serif text-2xl mb-4">Small-Scale Commercial</h3>
+        <p class="text-text-muted mb-6">Thoughtfully designed public and commercial spaces that serve their communities and enhance the urban fabric.</p>
+        <ul class="space-y-2 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="text-accent-yellow">•</span>
+            Cultural Spaces
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-yellow">•</span>
+            Retail &amp; Hospitality
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-accent-yellow">•</span>
+            Adaptive Reuse
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process Section -->
+<section id="process" class="flex flex-col lg:flex-row justify-between items-center py-24 px-6 lg:px-3xl bg-text-dark text-bg-primary" data-animation-on-scroll="fadeInUp">
+  <div class="hidden lg:block text-xs font-medium uppercase tracking-wider transform rotate-180" style="writing-mode: vertical-rl;">My Approach</div>
+  
+  <div class="w-full lg:w-4/5 flex flex-col lg:flex-row border border-bg-primary">
+    <!-- Step 1 -->
+    <div class="flex-1 p-8 lg:p-10 flex flex-col items-center text-center gap-5 border-b lg:border-b-0 lg:border-r border-bg-primary">
+      <div class="font-serif text-4xl">01</div>
+      <h5 class="text-sm font-medium uppercase tracking-wider">Listen</h5>
+      <p class="text-bg-primary opacity-80">Understanding your vision, lifestyle, and the unique characteristics of your site through deep conversation.</p>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="flex-1 p-8 lg:p-10 flex flex-col items-center text-center gap-5 border-b lg:border-b-0 lg:border-r border-bg-primary">
+      <div class="font-serif text-4xl">02</div>
+      <h5 class="text-sm font-medium uppercase tracking-wider">Explore</h5>
+      <p class="text-bg-primary opacity-80">Developing design concepts through sketches, models, and digital tools that capture the project's essence.</p>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="flex-1 p-8 lg:p-10 flex flex-col items-center text-center gap-5 border-b lg:border-b-0 lg:border-r border-bg-primary">
+      <div class="font-serif text-4xl">03</div>
+      <h5 class="text-sm font-medium uppercase tracking-wider">Refine</h5>
+      <p class="text-bg-primary opacity-80">Iterating on the design with your feedback, developing detailed drawings and specifications.</p>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="flex-1 p-8 lg:p-10 flex flex-col items-center text-center gap-5">
+      <div class="font-serif text-4xl">04</div>
+      <h5 class="text-sm font-medium uppercase tracking-wider">Build</h5>
+      <p class="text-bg-primary opacity-80">Guiding the project through construction with careful oversight to ensure quality and design intent.</p>
+    </div>
+  </div>
+
+  <div class="hidden lg:block text-xs font-medium uppercase tracking-wider" style="writing-mode: vertical-rl;">My Approach</div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-24 px-6 lg:px-3xl" data-animation-on-scroll="fadeInUp">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-16 text-center">
+      <h5 class="inline-block text-xs font-medium uppercase tracking-wider pb-2 border-b border-dashed border-border-color mb-3">Client Feedback</h5>
+      <h2 class="font-serif text-4xl lg:text-6xl">What Clients Say</h2>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Testimonial 1 -->
+      <div class="bg-bg-secondary border border-border-color p-8 lg:p-10" data-animation-on-scroll="fadeInUp">
+        <div class="flex items-center gap-4 mb-6">
+          <img src="https://i.pravatar.cc/60?img=47" alt="Michael Torres" class="w-12 h-12 rounded-sm border border-border-color">
+          <div>
+            <div class="font-medium">Michael &amp; Lisa Torres</div>
+            <div class="text-sm text-text-muted uppercase tracking-wider">Skyline Residence Clients</div>
+          </div>
+        </div>
+        <p class="text-text-muted italic mb-4">"Alex transformed our hillside property into a dream home that feels both modern and timeless. His attention to sustainable design and local materials exceeded our expectations."</p>
+        <div class="flex gap-1 text-accent-yellow">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="bg-bg-secondary border border-border-color p-8 lg:p-10" data-animation-on-scroll="fadeInUp">
+        <div class="flex items-center gap-4 mb-6">
+          <img src="https://i.pravatar.cc/60?img=29" alt="Jennifer Park" class="w-12 h-12 rounded-sm border border-border-color">
+          <div>
+            <div class="font-medium">Jennifer Park</div>
+            <div class="text-sm text-text-muted uppercase tracking-wider">Downtown Loft Client</div>
+          </div>
+        </div>
+        <p class="text-text-muted italic mb-4">"Working with Alex was a collaborative joy. He listened carefully to how I live and work, then created a space that perfectly balances industrial character with warm, livable design."</p>
+        <div class="flex gap-1 text-accent-yellow">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="bg-bg-secondary border border-border-color p-8 lg:p-10" data-animation-on-scroll="fadeInUp">
+        <div class="flex items-center gap-4 mb-6">
+          <img src="https://i.pravatar.cc/60?img=65" alt="David Kim" class="w-12 h-12 rounded-sm border border-border-color">
+          <div>
+            <div class="font-medium">David &amp; Rachel Kim</div>
+            <div class="text-sm text-text-muted uppercase tracking-wider">Forest Retreat Clients</div>
+          </div>
+        </div>
+        <p class="text-text-muted italic mb-4">"Our off-grid cabin is a masterpiece of thoughtful design. Alex's expertise in sustainable architecture created a space that's comfortable year-round while treading lightly on the land."</p>
+        <div class="flex gap-1 text-accent-yellow">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+      </div>
+
+      <!-- Testimonial 4 -->
+      <div class="bg-bg-secondary border border-border-color p-8 lg:p-10" data-animation-on-scroll="fadeInUp">
+        <div class="flex items-center gap-4 mb-6">
+          <img src="https://i.pravatar.cc/60?img=38" alt="Maria Santos" class="w-12 h-12 rounded-sm border border-border-color">
+          <div>
+            <div class="font-medium">Maria Santos</div>
+            <div class="text-sm text-text-muted uppercase tracking-wider">Library Director</div>
+          </div>
+        </div>
+        <p class="text-text-muted italic mb-4">"Alex designed a community library that has become the heart of our neighborhood. His ability to create welcoming, accessible public space is truly exceptional."</p>
+        <div class="flex gap-1 text-accent-yellow">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section id="contact" class="py-24 px-6 lg:px-3xl bg-text-dark text-bg-primary text-center" data-animation-on-scroll="fadeInUp">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="font-serif text-4xl lg:text-6xl mb-6">Let's Create Something Meaningful</h2>
+    <p class="text-lg text-bg-primary opacity-80 mb-8 max-w-2xl mx-auto">
+      I'm currently accepting a limited number of projects for 2024-2025. If you have a project in mind, I'd love to hear about it.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="mailto:hello@alexchen.design" class="inline-flex items-center gap-2 bg-accent-yellow text-text-dark font-medium text-sm uppercase tracking-wider px-8 py-4 border border-border-color hover:bg-accent-hover hover:scale-105 transition-all duration-300 group">
+        Get in Touch
+        <span class="transition-transform duration-300 group-hover:translate-x-1">→</span>
+      </a>
+      <a href="/case-studies" class="inline-flex items-center gap-2 bg-transparent text-bg-primary font-medium text-sm uppercase tracking-wider px-8 py-4 border border-bg-primary hover:bg-bg-primary hover:bg-opacity-10 hover:scale-105 transition-all duration-300">
+        View All Work
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+// Add any page-specific JavaScript here
+</script></main>
+
+  <!-- Footer -->
+  <footer class="flex flex-col lg:flex-row justify-between items-start gap-10 px-6 lg:px-3xl" data-editable="footer">
+    <nav class="flex flex-col gap-3 pt-3xl w-full lg:w-auto">
+      <a href="#work" class="text-xs font-medium uppercase tracking-wider hover:underline">Selected Work</a>
+      <a href="#about" class="text-xs font-medium uppercase tracking-wider hover:underline">About Me</a>
+      <a href="#process" class="text-xs font-medium uppercase tracking-wider hover:underline">My Approach</a>
+    </nav>
+
+    <div class="flex flex-col items-center text-center gap-3 py-3xl px-2xl border-l-0 lg:border-l border-r-0 lg:border-r border-border-color flex-grow">
+      <h3 data-editable="text" data-path="footer.brand.name" class="font-serif text-3xl">Alex Chen</h3>
+      
+      <div class="flex gap-3 mb-3">
+        <a href="#" aria-label="Dribbble" class="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.605 4.61a8.502 8.502 0 0 1 1.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 0 0-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0 1 12 3.475zm-3.633.803a53.896 53.896 0 0 1 3.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 0 1 4.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.25.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 0 1-2.19-5.705zM12 20.547a8.482 8.482 0 0 1-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 0 1 1.823 6.475 8.4 8.4 0 0 1-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 0 1-3.655 5.715z"></path>
+          </svg>
+        </a>
+        <a href="#" aria-label="Behance" class="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988H0V5.021h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zM3 11h3.584c2.508 0 2.906-3-.312-3H3v3zm3.391 3H3v3.016h3.341c3.055 0 2.868-3.016.05-3.016z"></path>
+          </svg>
+        </a>
+        <a href="#" aria-label="LinkedIn" class="w-8 h-8 flex items-center justify-center hover:opacity-70 transition-opacity">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+          </svg>
+        </a>
+      </div>
+
+      <h6 data-editable="text" data-path="footer.brand.tagline" class="text-xs font-medium uppercase tracking-wider">Architect &amp; Spatial Designer</h6>
+      <p data-editable="text" data-path="footer.brand.description" class="text-text-muted max-w-md">
+        Crafting timeless architecture that harmonizes with nature and enhances human experience. Based in Portland, working globally.
+      </p>
+    </div>
+
+    <nav class="flex flex-col items-end gap-3 pt-3xl w-full lg:w-auto">
+      <a href="#contact" class="text-xs font-medium uppercase tracking-wider hover:underline">Get in Touch</a>
+      <a href="/case-studies" class="text-xs font-medium uppercase tracking-wider hover:underline">All Projects</a>
+      <a href="mailto:hello@alexchen.design" class="text-xs font-medium uppercase tracking-wider hover:underline">hello@alexchen.design</a>
+    </nav>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Mobile menu toggle
+      const menuToggle = document.getElementById('mobile-menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+          mobileMenu.classList.toggle('flex');
+        });
+      }
+
+      // Scroll reveal animation
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-on-scroll-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.05 });
+
+      document.querySelectorAll('[data-animation-on-scroll]').forEach(el => {
+        el.classList.add('animate-on-scroll-hidden');
+        observer.observe(el);
+      });
+
+      // Image reveal animation
+      const imageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const overlay = entry.target.querySelector('.image-reveal-overlay');
+            if (overlay) {
+              setTimeout(() => {
+                overlay.classList.add('revealed');
+              }, 200);
+            }
+            imageObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('[data-image-reveal]').forEach(el => {
+        imageObserver.observe(el);
+      });
+    });
+  </script>
+
+
+</body></html>
